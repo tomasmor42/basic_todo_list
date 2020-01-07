@@ -40,3 +40,6 @@ def test_create_task_in_the_past():
     
     task = service.create_task(date, TASK_TEXT)
     assert task is None
+
+def test_fail():
+    assert False
