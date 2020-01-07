@@ -1,7 +1,6 @@
 # basic_todo_list
 [![Travis][build-badge]][build]
 
-Awesome factory line manager!
 
 [build-badge]: https://img.shields.io/travis/tomasmor42/basic_todo_list/master.png?style=flat-square
 [build]: https://travis-ci.org/tomasmor42/basic_todo_list
