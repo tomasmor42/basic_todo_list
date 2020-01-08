@@ -43,3 +43,6 @@ def test_create_task_in_the_past():
 
 def test_fail():
     assert False
+
+def test_fail_again():
+    assert False
