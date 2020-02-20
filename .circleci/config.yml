@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   python: circleci/python@0.2.1
 jobs:
-  working_directory: ~/basic_todo_list
+  working_directory: ~/
   build-and-test:
     executor: python/default
     steps:
