@@ -15,7 +15,7 @@ jobs:
           command: pip install -r requirements.txt
           name: Install dependencies
       - run: 
-          command: pytest
+          command: "py.test"
           name: Test
 
 workflows:
