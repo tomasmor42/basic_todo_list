@@ -20,6 +20,8 @@ How to start:
   * POST: /tasks/post: create a task. Takes task date (suppose to be in the future) and text in request arguments. 
 * To run tests you can run `pytest tests/test_pytest.py`
 
+
+
 Это небольшое приложение на Flask, которое представляет собой простйший todo-лист. 
 Как начать: 
 * склонировать этот репозиторий;
