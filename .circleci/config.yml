@@ -3,8 +3,8 @@ version: 2.1
 orbs:
   python: circleci/python@0.2.1
 jobs:
+  working_directory: ~/basic_todo_list
   build-and-test:
-    working_directory: ~/.
     executor: python/default
     steps:
       - checkout
@@ -12,6 +12,8 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
+          command: pip install -r requirements/testing.txt
+          name: Install dependencies
           command: pytest
           name: Test
 
