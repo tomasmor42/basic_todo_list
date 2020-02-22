@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-from service import get_task, get_all_tasks, create_task
+from service import get_task, get_all_tasks, create_task, update_task_by_id
 
 
 class APIException(Exception):
@@ -27,23 +27,62 @@ def handle_invalid_usage(error):
     return response
 
 
-@app.route("/tasks")
+@app.route("/tasks", methods=['GET'])
 def tasks_list():
     tasks = get_all_tasks()
     return jsonify(tasks=tasks)
 
-@app.route("/tasks/<int:task_id>")
+@app.route("/tasks/<int:task_id>", methods=['GET'])
 def task_by_id(task_id):
     task = get_task(task_id)
     if not task:
         raise APIException("Task doesn't exist")
     return jsonify(task=task)
 
-@app.route("/tasks/post", methods=['POST'])
-def task_post():
+@app.route("/tasks/<int:task_id>", methods=['PUT'])
+def task_update_by_id(task_id):
     text = request.args.get('text')
-    date = request.args.get('date')
-    task_id = create_task(date, text)
+    update_task_by_id(task_id, text)
+    if not task_id:
+        raise APIException("Task doesn't exist")
+
+    return jsonify({'task_id':task_id})
+    
+from uuid import uuid4 
+from collections import namedtuple
+
+TASKS = {}
+Task = namedtuple('Task', ['date', 'text'])
+
+def get_parameters_for_task_creation(args):
+    text = args.get('text')
+    date = args.get('date')
+    return text, date
+
+def format_date(date):
+    try: 
+        date_format = datetime.strptime(date, '%Y-%m-%d %H:%M')
+        if date_format > datetime.now():
+            return date_format
+    except ValueError:
+        return None
+    
+        
+        
+
+@app.route("/tasks", methods=['POST'])
+def task_post():
+    text, date = get_parameters_for_task_creation(request.args)
+    if not(text and date):
+        APIException(status_code=412, message='Text and date should not be empty')
+        
+    date_format = format_date(date) 
+    if not date_format:
+        raise APIException(
+            status_code=412, message='Date should be in the future in format %Y-%m-%d %H:%M')
+    task_id = str(uuid4())
+    TASKS[task_id] = Task(date=date_format, text=text)
+
     if task_id:
         return jsonify({'task_id':task_id})
     raise APIException(status_code=412, message='Date should be in the future')
